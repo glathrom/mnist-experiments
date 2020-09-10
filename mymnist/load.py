@@ -1,11 +1,13 @@
 import struct
 import os
+from PIL import Image
+import numpy as np
 
 
 class MNIST:
 
     def __init__(self):
-        self.data_path = '/home/lathrom-g/Projects/pytorch-tutorial/data/'
+        self.data_path = '/home/lathrom-g/Projects/mnist-experiments/data/'
         self.load_training_labels()
         self.load_training_images()
         self.load_testing_labels()
@@ -148,6 +150,19 @@ class MNIST:
                 print(f'Number of items read correct')
             else:
                 raise DataError(f'Number of items read doens\'t match number needed for {fn}')
+
+
+
+    def display_testing_image(self, idx):
+        offset = self.image_colums*self.image_rows
+        x = self.testing_values[idx*offset:(idx+1)*offset]
+        r,c = self.image_rows, self.image_colums
+        data = np.reshape(x, (r,c))
+        img = Image.fromarray(data.astype(np.uint8))
+        img.save('/tmp/booger.png')
+        img.show()
+    
+
 
 if __name__ == '__main__':
     mnist = MNIST()
